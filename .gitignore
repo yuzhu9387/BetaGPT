@@ -31,8 +31,11 @@ ENV/
 *.swo
 
 # 本地配置文件
-.env
 .env.local
 
 # 向量存储
 vector_store/
+
+# Environment variables
+.env
+*/.env
