@@ -1,5 +1,5 @@
 # 这个文件可以完全空着 
-
+import logging
 from .airtable_client import AirtableClient
 from .llm_service import LLMService
 
@@ -16,5 +16,4 @@ DEFAULT_CONFIG = {
 }
 
 # 初始化日志
-import logging
-logging.basicConfig(level=logging.INFO) 
+logging.basicConfig(level=logging.INFO)

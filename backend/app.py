@@ -1,11 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 from airtable_client import AirtableClient
 from llm_service import LLMService
-import os
+from models import QuestionRequest
 from dotenv import load_dotenv
-import uvicorn
+from datetime import datetime
+
 
 load_dotenv()
 app = FastAPI()
@@ -19,27 +19,44 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 初始化服务
+# initialize services
 airtable_client = AirtableClient()
-documents = airtable_client.fetch_all_records()
-llm_service = LLMService(documents)
-
-class QuestionRequest(BaseModel):
-    question: str
-    chat_history: list = []
+llm_service = LLMService()
 
 @app.post("/api/ask")
 async def ask_question(request: QuestionRequest):
     try:
+        # 添加请求调试日志
+        print("Received question:", request.question)
+        print("Received chat history:", request.chat_history)
+        print("Full request object:", request.dict())
+        
         answer = llm_service.get_answer(request.question, request.chat_history)
+        # 添加 AI 回答的调试日志
+        print("AI answer:", answer)
+        
         return {"answer": answer}
     except Exception as e:
+        print("Error occurred:", str(e))  # 添加错误日志
         raise HTTPException(status_code=500, detail=str(e))
 
-if __name__ == "__main__":
-    uvicorn.run(
-        "backend.app:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True
-    )
+
+@app.post("/api/reload_airtable")
+async def reload_airtable():
+    try:
+        # airtable_client.delete_records_file()
+        # airtable_client.fetch_all_records()
+        llm_service.check_and_clean_vectorstore()
+        success = llm_service.process_documents_to_vectorstore()
+        if success:
+            return {
+                "status": "success",
+                "message": "Successfully updated all documents to BetaGPT RAG",
+                "updated_at": datetime.now().isoformat(),
+            }
+        else:
+            raise HTTPException(status_code=500,
+                                detail="Failed to update documents to BetaGPT RAG, error is: " + str(e))
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to update documents, error is: {str(e)}")
