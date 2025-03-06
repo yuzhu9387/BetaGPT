@@ -9,8 +9,6 @@ NC='\033[0m'
 
 echo -e "${BLUE}===== BetaGPT start service =====${NC}"
 
-git submodule update --init --recursive
-
 # Check if Python3 is installed
 if ! command -v python3 &> /dev/null; then
     echo -e "${YELLOW}Python3 not found, trying to install...${NC}"
@@ -54,6 +52,7 @@ sleep 5
 
 # Start frontend service
 echo -e "${BLUE}Starting frontend service...${NC}"
+rm -rf frontend git submodule update --init --recursive
 cd ../frontend || { echo -e "${RED}Failed to enter frontend directory${NC}"; exit 1; }
 
 # Check if npm is installed
