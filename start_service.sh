@@ -56,23 +56,26 @@ cd ../frontend || { echo -e "${RED}Failed to enter frontend directory${NC}"; exi
 
 # Check if npm is installed
 if ! command -v npm &> /dev/null; then
-    echo -e "${YELLOW}npm not found, trying to install Node.js and npm...${NC}"
+    echo -e "${YELLOW}npm not found, adding Node.js module to Replit...${NC}"
     
-    # try to install Node.js and npm
-    if command -v apt-get &> /dev/null; then
-        # Debian/Ubuntu
-        sudo apt-get update && sudo apt-get install -y nodejs npm || { 
-            echo -e "${RED}Failed to install Node.js and npm, please install it manually and try again${NC}"
-            kill $BACKEND_PID
-            exit 1
-        }
-    else
-        echo -e "${RED}Failed to install Node.js and npm, please install it manually and try again${NC}"
-        kill $BACKEND_PID
-        exit 1
+    # Add Node.js module to .replit file if it doesn't exist
+    if ! grep -q "nodejs" .replit; then
+        echo -e "${BLUE}Adding Node.js module to .replit file...${NC}"
+        cd ../
+        if grep -q "modules" .replit; then
+            # If modules line exists, add nodejs to it
+            sed -i 's/modules = \[/modules = \["nodejs",/g' .replit
+        else
+            # If modules line doesn't exist, add it
+            echo 'modules = ["nodejs", "python-3.12", "web"]' >> .replit
+        fi
+        cd frontend
     fi
     
-    echo -e "${GREEN}Node.js and npm installed successfully!${NC}"
+    echo -e "${YELLOW}Node.js module added. You may need to restart your Repl for changes to take effect.${NC}"
+    echo -e "${RED}Please restart the Repl and run the script again.${NC}"
+    kill $BACKEND_PID
+    exit 1
 fi
 
 # Install frontend dependencies
