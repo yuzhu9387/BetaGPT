@@ -9,6 +9,8 @@ NC='\033[0m'
 
 echo -e "${BLUE}===== BetaGPT start service =====${NC}"
 
+git submodule update --init --recursive
+
 # Check if Python3 is installed
 if ! command -v python3 &> /dev/null; then
     echo -e "${YELLOW}Python3 not found, trying to install...${NC}"
