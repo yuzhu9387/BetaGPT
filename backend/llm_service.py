@@ -14,7 +14,7 @@ import logging
 import time
 import traceback
 import sys
-import psutil  # 如果没有安装，请运行 pip install psutil
+import psutil  
 
 
 class LLMService:
@@ -33,7 +33,7 @@ class LLMService:
                 "OPENAI_API_KEY not found in environment variables")
         try:
             self.embeddings = OpenAIEmbeddings(
-                model="text-embedding-3-large"  # 使用更高级的嵌入模型
+                model="text-embedding-3-large" 
             )
             self.vectorstore = self._initialize_vectorstore()
             self.llm = ChatOpenAI(temperature=0.8,
