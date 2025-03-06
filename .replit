@@ -1,11 +1,11 @@
-modules = ["nodejs", "nodejs-20", "python-3.12", "web"]
+modules = ["python-3.12", "bash", "web"]
 run = "bash start_service.sh"
 
 [nix]
 channel = "stable-24_05"
 
 [deployment]
-run = ["bash", "start_service.sh"]
+run = ["sh", "-c", "bash start_service.sh"]
 
 [[ports]]
 localPort = 3000
