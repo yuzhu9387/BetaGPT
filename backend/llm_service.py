@@ -37,7 +37,7 @@ class LLMService:
             )
             self.vectorstore = self._initialize_vectorstore()
             self.llm = ChatOpenAI(temperature=0.8,
-                                  model="gpt-4.5-preview",
+                                  model="gpt-4o",
                                   max_tokens=10000,
                                   frequency_penalty=0.4,
                                   presence_penalty=0.3,
