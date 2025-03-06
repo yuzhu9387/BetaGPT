@@ -83,52 +83,52 @@ if [ "$FRONTEND_ENABLED" = "true" ]; then
     }
 fi
 # # Check if npm is installed
-if ! command -v npm &> /dev/null; then
-    echo -e "${YELLOW}npm not found, installing Node.js...${NC}"
-    # In Replit, Node.js module is already in .replit, but we need to make sure
-    # the system refreshes its paths
-    echo -e "${BLUE}Refreshing Node.js module...${NC}"
+# if ! command -v npm &> /dev/null; then
+#     echo -e "${YELLOW}npm not found, installing Node.js...${NC}"
+#     # In Replit, Node.js module is already in .replit, but we need to make sure
+#     # the system refreshes its paths
+#     echo -e "${BLUE}Refreshing Node.js module...${NC}"
 
-    # Execute a shell command to ensure npm is available
-    if command -v replit-cli &> /dev/null; then
-        replit-cli packages reload || { echo -e "${RED}Failed to reload packages${NC}"; exit 1; }
-    fi
-    npm -v
-    # Wait for npm to become available
-    echo -e "${BLUE}Waiting for npm to become available...${NC}"
-    sleep 5
+#     # Execute a shell command to ensure npm is available
+#     if command -v replit-cli &> /dev/null; then
+#         replit-cli packages reload || { echo -e "${RED}Failed to reload packages${NC}"; exit 1; }
+#     fi
+#     npm -v
+#     # Wait for npm to become available
+#     echo -e "${BLUE}Waiting for npm to become available...${NC}"
+#     sleep 5
 
-    # Check again if npm is now available
-    if ! command -v npm &> /dev/null; then
-        echo -e "${RED}npm still not found. Please restart your Repl or add the 'nodejs' module manually in the 'Packages' tab.${NC}"
-        exit 1
-    fi
+#     # Check again if npm is now available
+#     if ! command -v npm &> /dev/null; then
+#         echo -e "${RED}npm still not found. Please restart your Repl or add the 'nodejs' module manually in the 'Packages' tab.${NC}"
+#         exit 1
+#     fi
 
-    echo -e "${GREEN}Node.js installed successfully!${NC}"
-fi
+#     echo -e "${GREEN}Node.js installed successfully!${NC}"
+# fi
 
 
-# # Start frontend service
-if [ "$FRONTEND_ENABLED" != "false" ]; then
-    echo -e "${BLUE}Installing frontend dependencies...${NC}"
-    npm install || { 
-        echo -e "${RED}Failed to install frontend dependencies${NC}";
-        FRONTEND_ENABLED=false
-    }
+# # # Start frontend service
+# if [ "$FRONTEND_ENABLED" != "false" ]; then
+#     echo -e "${BLUE}Installing frontend dependencies...${NC}"
+#     npm install || { 
+#         echo -e "${RED}Failed to install frontend dependencies${NC}";
+#         FRONTEND_ENABLED=false
+#     }
 
-    if [ "$FRONTEND_ENABLED" != "false" ]; then
-        echo -e "${GREEN}Starting frontend service...${NC}"
-        npm start &
-        FRONTEND_PID=$!
-        echo -e "${GREEN}Frontend service started, PID: $FRONTEND_PID${NC}"
-    fi
-fi
+#     if [ "$FRONTEND_ENABLED" != "false" ]; then
+#         echo -e "${GREEN}Starting frontend service...${NC}"
+#         npm start &
+#         FRONTEND_PID=$!
+#         echo -e "${GREEN}Frontend service started, PID: $FRONTEND_PID${NC}"
+#     fi
+# fi
 
-echo -e "${GREEN}All services started!${NC}"
-echo -e "${BLUE}Press Ctrl+C to stop all services${NC}"
+# echo -e "${GREEN}All services started!${NC}"
+# echo -e "${BLUE}Press Ctrl+C to stop all services${NC}"
 
-# catch interrupt signal, gracefully stop services
-trap 'echo -e "${BLUE}stopping services...${NC}"; kill $BACKEND_PID $FRONTEND_PID; echo -e "${GREEN}services stopped${NC}"; exit 0' INT
+# # catch interrupt signal, gracefully stop services
+# trap 'echo -e "${BLUE}stopping services...${NC}"; kill $BACKEND_PID $FRONTEND_PID; echo -e "${GREEN}services stopped${NC}"; exit 0' INT
 
 # keep script running
 wait
