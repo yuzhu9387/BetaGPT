@@ -5,6 +5,8 @@ from llm_service import LLMService
 from models import QuestionRequest
 from dotenv import load_dotenv
 from datetime import datetime
+from fastapi.responses import FileResponse, Response
+import os
 
 
 load_dotenv()
@@ -64,3 +66,10 @@ async def reload_airtable():
 @app.get("/")
 async def root():
     return {"message": "Server is running"}
+
+@app.get("/favicon.ico")
+async def favicon():
+    return Response(
+        content=b'',  # 返回空内容
+        media_type="image/x-icon"
+    )
