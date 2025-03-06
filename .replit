@@ -1,5 +1,5 @@
 
-modules = ["python-3.12", "web"]
+modules = ["nodejs","nodejs", "nodejs", "python-3.12", "web"]
 run = "bash start_service.sh"
 
 [nix]
@@ -10,7 +10,7 @@ run = ["bash", "start_service.sh"]
 
 [[ports]]
 localPort = 8000
-externalPort = 80
+externalPort = 8000
 
 [[ports]]
 localPort = 3000
