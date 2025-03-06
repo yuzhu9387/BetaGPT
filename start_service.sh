@@ -56,25 +56,28 @@ cd ../frontend || { echo -e "${RED}Failed to enter frontend directory${NC}"; exi
 
 # Check if npm is installed
 if ! command -v npm &> /dev/null; then
-    echo -e "${YELLOW}npm not found, adding Node.js module to Replit...${NC}"
-
-    # # Add Node.js module to .replit file if it doesn't exist
-    # if ! grep -q "nodejs" .replit; then
-    #     echo -e "${BLUE}Adding Node.js module to .replit file...${NC}"
-    #     cd ../
-    #     if grep -q "modules" .replit; then
-    #         # If modules line exists, add nodejs to it
-    #         sed -i 's/modules = \[/modules = \["nodejs",/g' .replit
-    #     else
-    #         # If modules line doesn't exist, add it
-    #         echo 'modules = ["nodejs", "python-3.12", "web"]' >> .replit
-    #     fi
-    #     cd frontend
-    # fi
-
-    # echo -e "${YELLOW}Node.js module added. Changes are now in effect.${NC}"
-    # echo -e "${GREEN}Continuing with automated processes...${NC}"
-    exit 1
+    echo -e "${YELLOW}npm not found, installing Node.js...${NC}"
+    
+    # In Replit, Node.js module is already in .replit, but we need to make sure
+    # the system refreshes its paths
+    echo -e "${BLUE}Refreshing Node.js module...${NC}"
+    
+    # Execute a shell command to ensure npm is available
+    if command -v replit-cli &> /dev/null; then
+        replit-cli packages reload || { echo -e "${RED}Failed to reload packages${NC}"; exit 1; }
+    fi
+    
+    # Wait for npm to become available
+    echo -e "${BLUE}Waiting for npm to become available...${NC}"
+    sleep 5
+    
+    # Check again if npm is now available
+    if ! command -v npm &> /dev/null; then
+        echo -e "${RED}npm still not found. Please restart your Repl or add the 'nodejs' module manually in the 'Packages' tab.${NC}"
+        exit 1
+    fi
+    
+    echo -e "${GREEN}Node.js installed successfully!${NC}"
 fi
 
 FRONTEND_ENABLED=true
