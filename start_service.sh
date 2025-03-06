@@ -12,7 +12,7 @@ echo -e "${BLUE}===== BetaGPT start service =====${NC}"
 # Check if Python3 is installed
 if ! command -v python3 &> /dev/null; then
     echo -e "${YELLOW}Python3 not found, trying to install...${NC}"
-    
+
     # try to install Python3
     if command -v apt-get &> /dev/null; then
         sudo apt-get update && sudo apt-get install -y python3 python3-pip python3-venv || { echo -e "${RED}Failed to install Python3 ${NC}"; exit 1; }
@@ -22,7 +22,7 @@ if ! command -v python3 &> /dev/null; then
         echo -e "${RED}Failed to install Python3, please install it manually and try again${NC}"
         exit 1
     fi
-    
+
     echo -e "${GREEN}Python3 installed successfully!${NC}"
 fi
 
@@ -57,7 +57,7 @@ cd ../frontend || { echo -e "${RED}Failed to enter frontend directory${NC}"; exi
 # Check if npm is installed
 if ! command -v npm &> /dev/null; then
     echo -e "${YELLOW}npm not found, adding Node.js module to Replit...${NC}"
-    
+
     # Add Node.js module to .replit file if it doesn't exist
     if ! grep -q "nodejs" .replit; then
         echo -e "${BLUE}Adding Node.js module to .replit file...${NC}"
@@ -71,26 +71,33 @@ if ! command -v npm &> /dev/null; then
         fi
         cd frontend
     fi
-    
+
     echo -e "${YELLOW}Node.js module added. You may need to restart your Repl for changes to take effect.${NC}"
     echo -e "${RED}Please restart the Repl and run the script again.${NC}"
     kill $BACKEND_PID
     exit 1
 fi
 
-# Install frontend dependencies
-echo -e "${BLUE}Installing frontend dependencies...${NC}"
-npm install || { 
-    echo -e "${RED}Failed to install frontend dependencies${NC}"
-    kill $BACKEND_PID
-    exit 1
-}
+FRONTEND_ENABLED=true
 
-# Start frontend service
-echo -e "${GREEN}Starting frontend service...${NC}"
-npm start &
-FRONTEND_PID=$!
-echo -e "${GREEN}Frontend service started, PID: $FRONTEND_PID${NC}"
+# Start frontend service if npm is available
+if [ "$FRONTEND_ENABLED" = true ]; then
+    echo -e "${BLUE}Starting frontend service...${NC}"
+    npm install || { 
+        echo -e "${RED}Failed to install frontend dependencies${NC}"
+        echo -e "${YELLOW}Continuing with backend service only${NC}"
+        FRONTEND_ENABLED=false
+    }
+
+    if [ "$FRONTEND_ENABLED" = true ]; then
+        echo -e "${GREEN}Starting frontend service...${NC}"
+        npm start &
+        FRONTEND_PID=$!
+        echo -e "${GREEN}Frontend service started, PID: $FRONTEND_PID${NC}"
+    fi
+else
+    echo -e "${YELLOW}Skipping frontend service due to missing npm${NC}"
+fi
 
 echo -e "${GREEN}All services started!${NC}"
 echo -e "${BLUE}Press Ctrl+C to stop all services${NC}"
@@ -99,4 +106,4 @@ echo -e "${BLUE}Press Ctrl+C to stop all services${NC}"
 trap 'echo -e "${BLUE}stopping services...${NC}"; kill $BACKEND_PID $FRONTEND_PID; echo -e "${GREEN}services stopped${NC}"; exit 0' INT
 
 # keep script running
-wait 
+wait
