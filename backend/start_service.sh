@@ -34,8 +34,8 @@ echo -e "${BLUE}Activating virtual environment...${NC}"
 source venv/bin/activate || { echo -e "${RED}Failed to activate virtual environment${NC}"; exit 1; }
 
 # Install backend dependencies
-echo -e "${BLUE}Installing backend dependencies...${NC}"
-pip3 install -r requirements.txt || { echo -e "${RED}Failed to install dependencies${NC}"; exit 1; }
+#echo -e "${BLUE}Installing backend dependencies...${NC}"
+#pip3 install -r requirements.txt || { echo -e "${RED}Failed to install dependencies${NC}"; exit 1; }
 
 # Start backend service
 uvicorn main:app --host 0.0.0.0 --port 8000
