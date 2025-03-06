@@ -8,9 +8,5 @@ channel = "stable-24_05"
 run = ["sh", "-c", "bash start_service.sh"]
 
 [[ports]]
-localPort = 3000
-externalPort = 80
-
-[[ports]]
 localPort = 8000
 externalPort = 8080

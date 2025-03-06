@@ -40,21 +40,21 @@ source venv/bin/activate || {
     echo -e "${RED}Failed to activate virtual environment${NC}"; exit 1; 
 }
 
-# Check frontend submodule
-if [ ! -d "frontend" ]; then
-    echo -e "${BLUE}Cloning frontend repository...${NC}"
-    git clone https://github.com/yuzhu9387/BetaGPT_frontend.git frontend || {
-        echo -e "${RED}Failed to clone frontend repository${NC}"
-        echo -e "${YELLOW}Continuing with backend service only${NC}"
-        FRONTEND_ENABLED=false
-    }
-else
-    echo -e "${BLUE}Frontend directory already exists, updating...${NC}"
-    (cd frontend && git pull) || {
-        echo -e "${YELLOW}Warning: Failed to update frontend, using existing code${NC}"
-    }
-    FRONTEND_ENABLED=true
-fi
+# # Check frontend submodule
+# if [ ! -d "frontend" ]; then
+#     echo -e "${BLUE}Cloning frontend repository...${NC}"
+#     git clone https://github.com/yuzhu9387/BetaGPT_frontend.git frontend || {
+#         echo -e "${RED}Failed to clone frontend repository${NC}"
+#         echo -e "${YELLOW}Continuing with backend service only${NC}"
+#         FRONTEND_ENABLED=false
+#     }
+# else
+#     echo -e "${BLUE}Frontend directory already exists, updating...${NC}"
+#     (cd frontend && git pull) || {
+#         echo -e "${YELLOW}Warning: Failed to update frontend, using existing code${NC}"
+#     }
+#     FRONTEND_ENABLED=true
+# fi
 
 # # Install backend dependencies
 echo -e "${BLUE}Installing backend dependencies...${NC}"
