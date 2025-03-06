@@ -12,3 +12,5 @@ pydantic
 airtable-python-wrapper
 psutil
 rank_bm25
+flask
+flask-cors
