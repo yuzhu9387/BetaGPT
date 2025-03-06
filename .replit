@@ -1,5 +1,5 @@
 
-modules = ["nodejs", "python-3.12", "web"]
+modules = ["nodejs","nodejs", "python-3.12", "web"]
 run = "bash start_service.sh"
 
 [nix]
