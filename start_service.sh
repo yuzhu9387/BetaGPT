@@ -52,7 +52,7 @@ sleep 5
 
 # Start frontend service
 echo -e "${BLUE}Starting frontend service...${NC}"
-rm -rf frontend git submodule update --init --recursive
+git submodule add https://github.com/yuzhu9387/BetaGPT_frontend.git frontend
 cd ../frontend || { echo -e "${RED}Failed to enter frontend directory${NC}"; exit 1; }
 
 # Check if npm is installed
