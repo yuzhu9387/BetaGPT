@@ -60,3 +60,7 @@ async def reload_airtable():
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to update documents, error is: {str(e)}")
+
+@app.get("/")
+async def root():
+    return {"message": "Server is running"}

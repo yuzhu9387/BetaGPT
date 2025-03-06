@@ -9,4 +9,4 @@ run = ["sh", "-c", "bash start_service.sh"]
 
 [[ports]]
 localPort = 8000
-externalPort = 8080
+externalPort = 80

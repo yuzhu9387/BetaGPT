@@ -65,6 +65,7 @@ pip install --no-user -r requirements.txt || {
     echo -e "${RED}Failed to install dependencies${NC}"; exit 1; 
 }
 
+export PORT=${PORT:-8000}
 # # Start backend service
 echo -e "${GREEN}Starting backend service...${NC}"
 python3 main.py &
